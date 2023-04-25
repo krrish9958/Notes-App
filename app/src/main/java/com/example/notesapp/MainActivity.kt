@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                     binding.reCyclerView.adapter=adapter
                     adapter.setOnItemClickListener(object : NoteAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
-                          val  intent = Intent(this@MainActivity, CreateNote::class.java)
+                          val  intent = Intent(this@MainActivity, DisplayNoteActivity::class.java)
 
                             //ek activity se dusri activity me data bhejne k liye
 

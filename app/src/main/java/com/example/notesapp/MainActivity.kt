@@ -45,6 +45,22 @@ class MainActivity : AppCompatActivity() {
                         notesList.add(noteData!!)
                     }
                     binding.reCyclerView.adapter=adapter
+                    adapter.setOnItemClickListener(object : NoteAdapter.onItemClickListener{
+                        override fun onItemClick(position: Int) {
+                          val  intent = Intent(this@MainActivity, CreateNote::class.java)
+
+                            //ek activity se dusri activity me data bhejne k liye
+
+                            intent.putExtra("noteId", notesList[position].noteId)
+                            intent.putExtra("noteTitle", notesList[position].noteTitle)
+                            intent.putExtra("noteDes", notesList[position].noteDes)
+                            intent.putExtra("noteDateTime", notesList[position].dateTime)
+
+                            startActivity(intent)
+                        }
+
+                    })
+
                 }
             }
 

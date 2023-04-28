@@ -11,7 +11,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class CreateNote : AppCompatActivity() {
 
-    val noteId = intent.getStringExtra("noteId")
+//    private val noteId = intent.getStringExtra("noteId")
   // variable bnaya jo refrence lega database se ( fire base realtime database using here )
     private lateinit var dbReference : DatabaseReference
 
@@ -23,12 +23,6 @@ class CreateNote : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val noteTitle = intent.getStringExtra("noteTitle").toString()
-        val noteDes = intent.getStringExtra("noteDes").toString()
-        val noteDateTime = intent.getStringExtra("noteDateTime")
-
-        binding.etTitle.setText(noteTitle)
-        binding.etDescription.setText(noteDes)
 
 
 
@@ -41,14 +35,6 @@ class CreateNote : AppCompatActivity() {
 
         binding.btnBack.setOnClickListener {
             onBackPressed()
-        }
-
-        binding.deleteBtn.setOnClickListener {
-
-            if (noteId != null) {
-                deleteNote(noteId)
-            }
-
         }
 
     }
@@ -78,36 +64,5 @@ class CreateNote : AppCompatActivity() {
             }
     }
 
-    private fun deleteNote(noteId: String) {
-        val dltReference = FirebaseDatabase.getInstance().getReference("Notes/$noteId")
 
-        dltReference.removeValue().addOnSuccessListener {
-            Toast.makeText(this,"Deleted Successfully", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-            .addOnFailureListener {error ->
-                Toast.makeText(this, "Failed ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-    private fun updateNote(){
-
-        val  updateReference = FirebaseDatabase.getInstance().getReference("Notes/$noteId")
- val updateTitle = binding.etTitle.text.toString()
-        val updateDes = binding.etDescription.text.toString()
-        if (updateTitle.isEmpty()){
-            binding.etTitle.error = "Title is required"
-        }
-        if (updateDes.isEmpty()){
-            binding.etDescription.error = "Description is Required"
-        }
-        var updatedNoteVariable = NotesData(noteId, updateTitle,updateDes )
-        updateReference.setValue(updatedNoteVariable).addOnSuccessListener {
-            Toast.makeText(this,"Successfully Updated",Toast.LENGTH_SHORT).show()
-          val  intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }.addOnFailureListener { error ->
-            Toast.makeText(this, "Failed ${error.message}",Toast.LENGTH_SHORT).show()
-        }
-    }
 }

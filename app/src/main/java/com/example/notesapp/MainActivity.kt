@@ -3,6 +3,7 @@ package com.example.notesapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesapp.databinding.ActivityMainBinding
 import com.google.firebase.database.*
@@ -32,7 +33,31 @@ class MainActivity : AppCompatActivity() {
         binding.reCyclerView.setHasFixedSize(true)
 
         getNotesData()
+
+//        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                // Filter your notes data based on the search query and update the RecyclerView
+//                filterNotes(newText)
+//                return true
+//            }
+//
+//        })
     }
+//
+//    private fun filterNotes(query : String?) {
+//        val filteredNotes = if (query.isNullOrBlank()){
+//            notesList
+//        }else{
+//            notesList.filter {
+//                it.noteTitle!!.contains(query , true) || it.noteDes!!.contains(query , true)
+//            }
+//        }
+//        adapter.
+//    }
 
     private fun getNotesData() {
         dbReference = FirebaseDatabase.getInstance().getReference("Notes")
@@ -47,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     binding.reCyclerView.adapter=adapter
                     adapter.setOnItemClickListener(object : NoteAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
-                          val  intent = Intent(this@MainActivity, CreateNote::class.java)
+                          val intent = Intent(this@MainActivity, UpdateActivity::class.java)
 
                             //ek activity se dusri activity me data bhejne k liye
 

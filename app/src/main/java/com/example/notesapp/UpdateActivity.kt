@@ -6,15 +6,20 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.notesapp.databinding.ActivityCreateNoteBinding
 import com.example.notesapp.databinding.ActivityUpdateBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class UpdateActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding : ActivityUpdateBinding
     private lateinit var noteId : String
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         noteId = intent.getStringExtra("noteId").toString()
         val noteTitle = intent.getStringExtra("noteTitle").toString()
         val noteDes = intent.getStringExtra("noteDes").toString()
@@ -47,7 +52,11 @@ class UpdateActivity : AppCompatActivity() {
 
 
     private fun deleteNote(noteId: String) {
-        val dltReference = FirebaseDatabase.getInstance().getReference("Notes/$noteId")
+        auth = FirebaseAuth.getInstance()
+        var user = auth.currentUser
+        var uid = user?.uid
+
+        val dltReference =  FirebaseDatabase.getInstance().getReference("users/$uid/notes/$noteId")
 
         dltReference.removeValue().addOnSuccessListener {
             Toast.makeText(this,"Deleted Successfully", Toast.LENGTH_SHORT).show()
@@ -60,8 +69,11 @@ class UpdateActivity : AppCompatActivity() {
     }
 
         private fun updateNote(){
+            auth = FirebaseAuth.getInstance()
+            var user = auth.currentUser
+            var uid = user?.uid
 
-        val  updateReference = FirebaseDatabase.getInstance().getReference("Notes/$noteId")
+        val  updateReference =  FirebaseDatabase.getInstance().getReference("users/$uid/notes/$noteId")
  val updateTitle = binding.updateTitle.text.toString()
         val updateDes = binding.updateDescription.text.toString()
         if (updateTitle.isEmpty()){

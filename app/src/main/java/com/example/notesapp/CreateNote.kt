@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.notesapp.databinding.ActivityCreateNoteBinding
 import com.example.notesapp.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class CreateNote : AppCompatActivity() {
-
+     private lateinit var auth: FirebaseAuth
 //    private val noteId = intent.getStringExtra("noteId")
   // variable bnaya jo refrence lega database se ( fire base realtime database using here )
     private lateinit var dbReference : DatabaseReference
@@ -27,7 +28,12 @@ class CreateNote : AppCompatActivity() {
 
 
 // variable ki value ko intialize krdiya
-        dbReference = FirebaseDatabase.getInstance().getReference("Notes")
+        auth = FirebaseAuth.getInstance()
+        var user = auth.currentUser
+        var uid = user?.uid
+        var gmail = user?.email
+        var name = user?.displayName
+        dbReference = FirebaseDatabase.getInstance().getReference("users/$uid/notes")
 
         binding.btnSave.setOnClickListener {
             saveNote()
@@ -56,12 +62,16 @@ class CreateNote : AppCompatActivity() {
 
         var note = NotesData(noteId, title, noteDescription)
         dbReference.child(noteId).setValue(note).addOnSuccessListener {
+
             Toast.makeText(this, "Successfully Saved", Toast.LENGTH_SHORT).show()
+            var intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
             .addOnFailureListener {
                 error ->
                 Toast.makeText(this, "Failed ${error.message}", Toast.LENGTH_SHORT).show()
             }
+
     }
 
 

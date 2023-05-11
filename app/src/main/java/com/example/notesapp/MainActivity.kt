@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesapp.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
     private lateinit var adapter : NoteAdapter
     private lateinit var notesList : ArrayList<NotesData>
      private lateinit var dbReference: DatabaseReference
@@ -60,7 +62,10 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     private fun getNotesData() {
-        dbReference = FirebaseDatabase.getInstance().getReference("Notes")
+        auth = FirebaseAuth.getInstance()
+        var user = auth.currentUser
+        var uid = user?.uid
+        dbReference =FirebaseDatabase.getInstance().getReference("users/$uid/notes")
         dbReference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 notesList.clear()
